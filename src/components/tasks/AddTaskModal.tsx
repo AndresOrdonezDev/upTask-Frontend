@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import TaskForm from './TaskFrom';
 import { TaskFormData } from '@/types/index';
@@ -16,7 +16,7 @@ export default function AddTaskModal() {
     const queryParams = new URLSearchParams(location.search);
     const modalTask = queryParams.get('newTask')
     const show = modalTask ? true : false
-
+    
     const initialValues: TaskFormData = {
         taskName: '',
         description: ''
@@ -26,9 +26,11 @@ export default function AddTaskModal() {
     const params = useParams()
     const projectId = params.projectId!
 
+    const queryClient = useQueryClient()
     const { mutate } = useMutation({
         mutationFn: createTask,
         onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['viewProject', projectId]})
             toast.success(data)
             reset()
             navigate(-1)

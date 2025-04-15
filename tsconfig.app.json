@@ -26,6 +26,9 @@
       "@/lib/*": [
         "./lib/*"
       ],
+      "@/utils/*": [
+        "./utils/*"
+      ],
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

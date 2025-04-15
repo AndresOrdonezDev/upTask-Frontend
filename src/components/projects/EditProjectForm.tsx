@@ -12,7 +12,9 @@ export type EditProjectFormProps = {
 }
 
 export default function EditProjectForm({data, projectId}:EditProjectFormProps) {
+
     const navigate = useNavigate()
+    
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: {
         "projectName": data.projectName,
         "clientName": data.clientName,

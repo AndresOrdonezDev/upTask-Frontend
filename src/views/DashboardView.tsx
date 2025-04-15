@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 export default function DashboardView() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  
   const { data } = useQuery({
     queryKey: ['projects'],
     queryFn: getProjects
