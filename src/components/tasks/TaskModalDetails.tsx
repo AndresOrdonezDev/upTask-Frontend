@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getTaskById } from '@/api/TaskAPI';
 import { toast } from 'react-toastify';
 import { formateDate } from '@/utils/utils';
-
+import { statusTranslations } from '@/locales/es';
 
 
 export default function TaskModalDetails() {
@@ -31,13 +31,6 @@ export default function TaskModalDetails() {
         }
     }, [isError, error, navigate, projectId]);
 
-    const translateStatus: { [key: string]: string } = {
-        pending: 'Pendiente',
-        onHold: 'En espera',
-        inProgress: 'En progreso',
-        underReview: 'En revisión',
-        complete: 'Completada'
-    }
 
     if (data) return (
         <>
@@ -77,7 +70,15 @@ export default function TaskModalDetails() {
                                     </Dialog.Title>
                                     <p className='text-lg text-slate-500 mb-2'>{data.description}</p>
                                     <div className='my-5 space-y-3'>
-                                        <label className='font-bold'>Estado Actual: {translateStatus[data.status]}</label>
+                                        <label className='font-bold'>Estado Actual:</label>
+                                        <select
+                                            className='w-full p-2 border bg-white border-gray-300 '
+                                            defaultValue={data.status}
+                                        >
+                                            {Object.entries(statusTranslations).map(([key, value])=>(
+                                                <option key={key} value={key}>{value}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

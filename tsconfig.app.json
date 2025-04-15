@@ -29,6 +29,9 @@
       "@/utils/*": [
         "./utils/*"
       ],
+      "@/locales/*": [
+        "./locales/*"
+      ],
     },
     /* Bundler mode */
     "moduleResolution": "bundler",
