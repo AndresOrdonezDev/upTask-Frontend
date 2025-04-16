@@ -5,7 +5,8 @@ import { Project, Task, TaskFormData, taskSchema } from "../types";
 type TaskType = {
     formData: TaskFormData,
     projectId: Project['_id'],
-    taskId: Task['_id']
+    taskId: Task['_id'],
+    status:Task['status']
 }
 export const createTask = async ({ formData, projectId }: Pick<TaskType, 'formData' | 'projectId'>) => {
     try {
@@ -48,6 +49,16 @@ export const updateTask = async ({ projectId, taskId, formData  }:Pick<TaskType,
 export const deleteTask = async ({ projectId,taskId}:Pick<TaskType,'projectId' | 'taskId'>) => {
     try {
         const { data } = await api.delete<string>(`/tasks/${projectId}/task/${taskId}`)
+        return data
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.message)
+        }
+    }
+}
+export const updateStatus = async ({ projectId,taskId, status }:Pick<TaskType,'projectId' | 'taskId'|'status'>) => {
+    try {
+        const { data } = await api.post<string>(`/tasks/${projectId}/task/${taskId}/status`, {status})
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
