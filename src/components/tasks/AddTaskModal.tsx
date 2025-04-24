@@ -11,7 +11,7 @@ import { createTask } from '@/api/TaskAPI';
 export default function AddTaskModal() {
 
     const navigate = useNavigate()
-    // if exists modal
+    // if exists param newTask on the URL
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search);
     const modalTask = queryParams.get('newTask')
@@ -21,6 +21,7 @@ export default function AddTaskModal() {
         taskName: '',
         description: ''
     }
+
     const { register, handleSubmit,reset, formState: { errors } } = useForm({ defaultValues: initialValues })
     // if exists projectId from url
     const params = useParams()
@@ -79,7 +80,7 @@ export default function AddTaskModal() {
                                 <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
                                     <Dialog.Title
                                         as="h3"
-                                        className="font-black text-4xl  my-5"
+                                        className="font-black text-3xl  my-3"
                                     >
                                         Nueva Tarea
                                     </Dialog.Title>
