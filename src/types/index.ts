@@ -43,12 +43,14 @@ export type TaskFormData = Pick<Task, 'taskName' | 'description'>
 // ** Auth & users ** //
 
 const authSchema = z.object({
-    name: z.string(),
+    username: z.string(),
     email: z.string().email(),
     password: z.string(),
     password_confirmation: z.string(),
+    token:z.string()
 })
 
 type Auth = z.infer<typeof authSchema>
 export type UserLoginForm = Pick<Auth, 'email' | 'password'>
-export type UserRegistrationForm = Pick<Auth, 'name' | 'email' | 'password' | 'password_confirmation'>
+export type UserRegistrationForm = Pick<Auth, 'username' | 'email' | 'password' | 'password_confirmation'>
+export type ConfirmToken = Pick<Auth, 'token'>

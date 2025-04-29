@@ -1,12 +1,14 @@
 import { useForm } from "react-hook-form";
-import { UserRegistrationForm } from "@/types/index";
-import ErrorMessage from "@/components/ErrorMessage";
 import { Link } from "react-router-dom";
-
+import { useMutation } from "@tanstack/react-query"
+import { UserRegistrationForm } from "@/types/index";
+import { toast } from "react-toastify"
+import ErrorMessage from "@/components/ErrorMessage";
+import { createAccount } from "@/api/AtuhAPI";
 export default function RegisterView() {
-  
+
   const initialValues: UserRegistrationForm = {
-    name: '',
+    username: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -14,9 +16,21 @@ export default function RegisterView() {
 
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<UserRegistrationForm>({ defaultValues: initialValues });
 
+  const { mutate } = useMutation({
+    mutationFn: createAccount,
+    onSuccess: (data) => {
+      toast.success(data)
+      reset(initialValues);
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
+
+  })
+
   const password = watch('password');
 
-  const handleRegister = (formData: UserRegistrationForm) => {}
+  const handleRegister = (formData: UserRegistrationForm) => mutate(formData)
 
   return (
     <>
@@ -62,12 +76,12 @@ export default function RegisterView() {
             type="name"
             placeholder="Nombre de Registro"
             className="w-full p-3  border-gray-300 border"
-            {...register("name", {
+            {...register("username", {
               required: "El Nombre de usuario es obligatorio",
             })}
           />
-          {errors.name && (
-            <ErrorMessage>{errors.name.message}</ErrorMessage>
+          {errors.username && (
+            <ErrorMessage>{errors.username.message}</ErrorMessage>
           )}
         </div>
 
