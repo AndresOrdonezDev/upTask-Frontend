@@ -5,8 +5,6 @@ import { useMutation } from "@tanstack/react-query"
 import {toast} from "react-toastify"
 import { ConfirmToken } from "@/types/index";
 import { confirmAccount } from "@/api/AtuhAPI";
-import { set } from "zod";
-
 
 export default function ConfirmAccountView() {
 
@@ -19,7 +17,7 @@ export default function ConfirmAccountView() {
             setToken('')
             setTimeout(() => {
                 window.location.href = '/auth/login'
-            }, 2000)
+            }, 3000)
         },
         onError: (error) => {
            toast.error(error.message)
