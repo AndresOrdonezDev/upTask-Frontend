@@ -24,10 +24,7 @@ export default function ConfirmAccountView() {
         }
     })
 
-    const handleComplete = (token:ConfirmToken['token']) => {
-        mutate({token})
-    }
-
+    const handleComplete = (token:ConfirmToken['token']) => mutate({token})
 
   return (
     <>

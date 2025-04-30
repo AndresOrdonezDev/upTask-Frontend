@@ -2,7 +2,9 @@ import { useForm } from "react-hook-form";
 import { UserLoginForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
 import { Link } from "react-router-dom";
-
+import { useMutation } from "@tanstack/react-query";
+import { authenticateUser } from "@/api/AtuhAPI";
+import { toast } from "react-toastify";
 export default function LoginView() {
 
   const initialValues: UserLoginForm = {
@@ -11,13 +13,33 @@ export default function LoginView() {
   }
   const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
 
-  const handleLogin = (formData: UserLoginForm) => { }
+  const { mutate } = useMutation({
+    mutationFn: authenticateUser,
+    onSuccess: (data) => {
+      toast.success('Bienvenido')
+      console.log(data);
+
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
+
+  })
+
+
+  const handleLogin = (formData: UserLoginForm) => mutate(formData)
+
 
   return (
     <>
+      <h1 className="text-3xl font-black text-white">Iniciar Sesión</h1>
+      <p className="text-xl font-light text-white mt-3">
+        Llena el formulario para {''}
+        <span className=" text-fuchsia-500 font-bold"> acceder</span>
+      </p>
       <form
         onSubmit={handleSubmit(handleLogin)}
-        className="space-y-4 p-10 bg-white"
+        className="space-y-4 p-10 bg-white mt-10"
         noValidate
       >
         <div className="flex flex-col gap-5">
@@ -69,7 +91,10 @@ export default function LoginView() {
       </form>
       <nav>
         <Link to={'/auth/register'} className="block text-center mt-5 text-gray-100">
-          ¿No tienes cuenta? <span className="text-fuchsia-400">Crear cuenta</span>
+          ¿No tienes cuenta? Crear cuenta
+        </Link>
+        <Link to={'/auth/forgot-password'} className="block text-center mt-5 text-gray-100">
+          ¿olvidaste tu contraseña? Restablecer
         </Link>
       </nav>
     </>
