@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { ForgotPasswordForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
-import { requestResetPassword } from "@/api/AtuhAPI";
+import { forgotPassword } from "@/api/AtuhAPI";
 
 export default function ForgotPasswordView() {
     const initialValues: ForgotPasswordForm = {
@@ -13,7 +13,7 @@ export default function ForgotPasswordView() {
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues: initialValues });
 
     const {mutate} = useMutation({
-        mutationFn:requestResetPassword,
+        mutationFn:forgotPassword,
         onSuccess: (data) => {
             toast.success(data)
             reset()
@@ -32,7 +32,7 @@ export default function ForgotPasswordView() {
             <h1 className="text-3xl font-black text-white">Recordar contraseña</h1>
             <p className="text-xl font-light text-white mt-3">
                Ingresa tu correo para generar el {''}
-                <span className=" text-fuchsia-500 font-bold"> token</span>
+                <span className=" text-fuchsia-500 font-bold"> Token</span>
             </p>
             <form
                 onSubmit={handleSubmit(handleForgotPassword)}

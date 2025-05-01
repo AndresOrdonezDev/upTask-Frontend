@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "@/lib/axios";
-import { ConfirmToken, ForgotPasswordForm, RequestConfirmationCodeForm, UserLoginForm, UserRegistrationForm } from "../types";
+import { ConfirmToken, ForgotPasswordForm, NewPasswordForm, RequestConfirmationCodeForm, UserLoginForm, UserRegistrationForm } from "../types";
 
 export async function createAccount(formData:UserRegistrationForm){
     try {
@@ -38,6 +38,8 @@ export async function requestConfirmationCode(email:RequestConfirmationCodeForm)
 export async function authenticateUser(formData:UserLoginForm){
     try {
         const {data} = await api.post<string>("/auth/login", formData);
+        //save data on localStorage
+        localStorage.setItem('token_upTask',data)
         return data;
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -46,9 +48,39 @@ export async function authenticateUser(formData:UserLoginForm){
         throw error;
     }
 }
-export async function requestResetPassword(email:ForgotPasswordForm){
+export async function forgotPassword(email:ForgotPasswordForm){
     try {
         const {data} = await api.post<string>("/auth/forgot-password", email);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data)
+        }
+        throw error;
+    }
+}
+
+export async function validateToken(token:ConfirmToken){
+    try {
+        const {data} = await api.post<string>("/auth/validate-token", token);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data)
+        }
+        throw error;
+    }
+}
+
+type UpdatePasswordType = {
+    token: ConfirmToken['token'],
+    password: NewPasswordForm
+}
+
+export async function updatePassword(formData:UpdatePasswordType){
+    const {token, password} = formData
+    try {
+        const {data} = await api.post<string>(`/auth/update-password/${token}`, password);
         return data;
     } catch (error) {
         if (isAxiosError(error) && error.response) {

@@ -1,10 +1,19 @@
-import type { NewPasswordForm } from "@/types/index";
+import type { ConfirmToken, NewPasswordForm } from "@/types/index";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "@/components/ErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { updatePassword } from "@/api/AtuhAPI";
+import { toast } from "react-toastify";
 
+type NewPasswordFormProps = {
+    token: ConfirmToken['token'];
+    setToken: React.Dispatch<React.SetStateAction<string>>;
+    setIsValidToken: React.Dispatch<React.SetStateAction<boolean>>;
 
-export default function NewPasswordForm() {
+}
+export default function NewPasswordForm({token,setToken,setIsValidToken}:NewPasswordFormProps) {
+    
     const navigate = useNavigate()
     const initialValues: NewPasswordForm = {
         password: '',
@@ -12,8 +21,27 @@ export default function NewPasswordForm() {
     }
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({ defaultValues: initialValues });
 
-
-    const handleNewPassword = (formData: NewPasswordForm) => {}
+    const {mutate} = useMutation({
+        mutationFn:updatePassword,
+        onSuccess: (data) => {
+            toast.success(data)
+            setToken('')
+            setIsValidToken(false)
+            reset()
+            navigate('/auth/login')
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    })
+    
+    const handleNewPassword = (formData: NewPasswordForm) => {
+        const data = {
+            token,
+            password: formData
+        }
+        mutate(data)
+    }
 
     const password = watch('password');
 
