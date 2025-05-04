@@ -32,6 +32,9 @@
       "@/locales/*": [
         "./locales/*"
       ],
+      "@/hooks/*": [
+        "./hooks/*"
+      ],
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

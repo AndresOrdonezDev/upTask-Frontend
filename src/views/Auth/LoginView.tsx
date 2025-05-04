@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { authenticateUser } from "@/api/AtuhAPI";
 import { toast } from "react-toastify";
+
 export default function LoginView() {
   const navigate = useNavigate()
   const initialValues: UserLoginForm = {
@@ -15,8 +16,7 @@ export default function LoginView() {
 
   const { mutate } = useMutation({
     mutationFn: authenticateUser,
-    onSuccess: (data) => {
-      toast.success('Bienvenido')
+    onSuccess: () => {
       navigate('/')
     },
     onError: (error) => {
