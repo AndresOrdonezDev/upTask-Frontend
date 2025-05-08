@@ -66,3 +66,14 @@ export const userSchema = authSchema.pick({
 })
 
 export type User = z.infer<typeof userSchema>
+
+//** Team */
+
+const teamMemberSchema = userSchema.pick({
+    username:true,
+    email:true,
+    _id:true
+})
+
+export type TeamMember = z.infer<typeof teamMemberSchema>
+export type TeamMemberForm = Pick<TeamMember,'email'>

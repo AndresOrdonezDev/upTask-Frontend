@@ -8,9 +8,7 @@ import NavMenu from '@/components/NavMenu'
 export default function AppLayout() {
 
     const { data, isError, isLoading } = useAuth()
-    console.log(data);
-    console.log(isError);
-    console.log(isLoading);
+   
     if (isLoading) return <p>Cargando...</p>
 
     if (isError) {
