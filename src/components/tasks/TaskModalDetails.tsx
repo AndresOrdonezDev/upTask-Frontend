@@ -30,8 +30,8 @@ export default function TaskModalDetails() {
         mutationFn: updateStatus,
         onSuccess: (data) => {
             toast.success(data)
-            queryClient.invalidateQueries({queryKey:['task', taskId]})
-            queryClient.invalidateQueries({queryKey:['viewProject',projectId]})
+            queryClient.invalidateQueries({ queryKey: ['task', taskId] })
+            queryClient.invalidateQueries({ queryKey: ['viewProject', projectId] })
             navigate(-1)
         },
         onError: (error) => {
@@ -87,6 +87,7 @@ export default function TaskModalDetails() {
                                 <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
                                     <p className='text-sm text-slate-400'>Agregada el: {formateDate(data.createdAt)}</p>
                                     <p className='text-sm text-slate-400'>Última actualización: {formateDate(data.updatedAt)}</p>
+
                                     <Dialog.Title
                                         as="h3"
                                         className="font-black text-4xl text-slate-600 my-5"
@@ -94,6 +95,19 @@ export default function TaskModalDetails() {
 
                                     </Dialog.Title>
                                     <p className='text-lg text-slate-500 mb-2'>{data.description}</p>
+                                    <p className='text-slate-500 mb-2'>Historial de cambios:</p>
+                                    <details className="px-5 text-sm text-slate-600">
+                                        <summary className="cursor-pointer font-semibold text-slate-700 mb-2">Ver historial de cambios</summary>
+                                        <ul className="list-decimal mt-2">
+                                            {data.completedBy.map((activityLog) => (
+                                                <li key={activityLog._id} className="mb-1">
+                                                    <span className="font-bold">{statusTranslations[activityLog.status]}:</span>{" "}
+                                                    <span>{activityLog.user.username}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </details>
+
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Estado Actual:</label>
                                         <select
