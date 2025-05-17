@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { formateDate } from '@/utils/utils';
 import { statusTranslations } from '@/locales/es';
 import { TaskStatus } from '@/types/index';
+import NotesPanel from '../notes/NotesPanel';
 
 
 export default function TaskModalDetails() {
@@ -95,18 +96,22 @@ export default function TaskModalDetails() {
 
                                     </Dialog.Title>
                                     <p className='text-lg text-slate-500 mb-2'>{data.description}</p>
-                                    <p className='text-slate-500 mb-2'>Historial de cambios:</p>
-                                    <details className="px-5 text-sm text-slate-600">
-                                        <summary className="cursor-pointer font-semibold text-slate-700 mb-2">Ver historial de cambios</summary>
-                                        <ul className="list-decimal mt-2">
-                                            {data.completedBy.map((activityLog) => (
-                                                <li key={activityLog._id} className="mb-1">
-                                                    <span className="font-bold">{statusTranslations[activityLog.status]}:</span>{" "}
-                                                    <span>{activityLog.user.username}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </details>
+                                    {data.completedBy.length ? (
+                                        <>
+                                            <p className='text-slate-500 mb-2'>Historial de cambios:</p>
+                                            <details className="px-5 text-sm text-slate-600">
+                                                <summary className="cursor-pointer font-semibold text-slate-700 mb-2">Ver historial de cambios</summary>
+                                                <ul className="list-decimal mt-2">
+                                                    {data.completedBy.map((activityLog) => (
+                                                        <li key={activityLog._id} className="mb-1">
+                                                            <span className="font-bold">{statusTranslations[activityLog.status]}:</span>{" "}
+                                                            <span>{activityLog.user.username}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </details>
+                                        </>
+                                    ):null}
 
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Estado Actual:</label>
@@ -120,6 +125,9 @@ export default function TaskModalDetails() {
                                             ))}
                                         </select>
                                     </div>
+
+                                    <NotesPanel notes={data.notes}/>
+
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>

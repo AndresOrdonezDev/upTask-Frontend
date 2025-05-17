@@ -18,15 +18,17 @@ export const createTask = async ({ formData, projectId }: Pick<TaskType, 'formDa
         }
     }
 }
-
 export const getTaskById = async ({ projectId,taskId}:Pick<TaskType,'projectId' | 'taskId'>) => {
     try {
         const { data } = await api.get(`/tasks/${projectId}/task/${taskId}`)
-
+        
+      
         const response = taskSchema.safeParse(data)
         if (response.success) {
             return response.data
-        }  
+        } else {
+           console.log("❌ Schema validation failed:", response.error.format())
+        } 
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             throw new Error(error.response.data)
@@ -44,7 +46,6 @@ export const updateTask = async ({ projectId, taskId, formData  }:Pick<TaskType,
         }
     }
 }
-
 export const deleteTask = async ({ projectId,taskId}:Pick<TaskType,'projectId' | 'taskId'>) => {
     try {
         const { data } = await api.delete<string>(`/tasks/${projectId}/task/${taskId}`)
