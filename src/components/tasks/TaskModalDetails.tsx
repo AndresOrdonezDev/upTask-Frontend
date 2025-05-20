@@ -40,7 +40,6 @@ export default function TaskModalDetails() {
         }
     })
     const handleChangeStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-
         const status = e.target.value as TaskStatus
         const data = {
             projectId,

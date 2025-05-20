@@ -2,31 +2,19 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { Link, useNavigate } from "react-router-dom"
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteProject, getProjects } from "@/api/ProjectAPI"
-import { toast } from 'react-toastify'
+import { useQuery} from '@tanstack/react-query'
+import { getProjects } from "@/api/ProjectAPI"
 import { useAuth } from '@/hooks/useAuth'
 import { isManager } from '@/utils/policies'
+import DeleteProjectModal from '@/components/projects/DeleteProjectModal'
 export default function DashboardView() {
 
-  const queryClient = useQueryClient()
+  
   const navigate = useNavigate()
   const { data: user, isLoading: authLoading } = useAuth()
   const { data, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: getProjects
-  })
-
-  const { mutate } = useMutation({
-    mutationFn: deleteProject,
-    onError: (error) => {
-      toast.error(error.message)
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
-      toast.success(data)
-      navigate('/')
-    }
   })
 
   if (isLoading || authLoading) return <p className="text-center py-5">Cargando...</p>
@@ -99,7 +87,7 @@ export default function DashboardView() {
                             <button
                               type='button'
                               className='block px-3 py-1 text-sm leading-6 text-red-500 font-bold'
-                              onClick={() => mutate(project._id)}
+                              onClick={() => navigate(location.pathname + `?deleteProject=${project._id}`)}
                             >
                               Eliminar Proyecto
                             </button>
@@ -111,8 +99,10 @@ export default function DashboardView() {
                 </Menu>
               </div>
             </li>
+
           ))}
         </ul>
+        
       ) : (
         <p className="text-center py-5">Aun no se han creado proyectos {' '}
           <Link
@@ -123,6 +113,7 @@ export default function DashboardView() {
           </Link>
         </p>
       )}
+      <DeleteProjectModal/>
     </>
   )
 }
